@@ -11,10 +11,11 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 分かりづらい場合は[こちら](https://www.kkaneko.jp/tools/win/buildtool2022.html)などが参考になると思います。  
   
 ### OpenSiv3DのSDKのインストール  
-次に、[こちら](https://siv3d.github.io/ja-jp/)からSDKをダウンロード、実行します。  
+次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.13)をダウンロード、実行します。  
 詳細はリンク先に記載されていますので、そちらに従ってください。  
+  
 ここで再起動をしておいたほうがいいかもしれません。  
-
+  
 ### ソースコードのダウンロード、配置  
 次に、[こちら](https://github.com/0x-sinsu/Sban_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
 (gitでも問題なし)  
@@ -22,6 +23,15 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 Physics1.slnがあるフォルダのパスを控えておきます。  
 次に、Main.cppをVSCodeなどで開きます。
 編集する箇所をコメントアウトで示していますので、それを参考に編集してください。  
+編集する部分の大まかな行は、
+121行目
+161行目
+170行目
+189行目
+227行目
+231行目
+334行目
+辺りです。  
 分からない所があればTwitterのDMやDiscordまでどうぞ。  
 Twitter:[@0x_sinsu](https://twitter.com/0x_sinsu)  
 Discord:subete_light  
