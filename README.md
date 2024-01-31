@@ -19,7 +19,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 次に、[こちら](https://github.com/0x-sinsu/Sban_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
 (gitでも問題なし)  
 任意のフォルダに配置します。  
-P2Glyph_1.slnがあるフォルダのパスを控えておきます。  
+Physics1.slnがあるフォルダのパスを控えておきます。  
 次に、Main.cppをVSCodeなどで開きます。
 編集する箇所をコメントアウトで示していますので、それを参考に編集してください。  
 分からない所があればTwitterのDMやDiscordまでどうぞ。  
@@ -30,9 +30,11 @@ Discord:subete_light
 次にスタートメニューで「x64 Native Tools Command Prompt for VS 2022」と検索し、出てきたものを実行します。  
 そこに以下のコマンドを貼り付け、実行します。  
 ```Batchfile
-msbuild "先ほど控えたフォルダパス\P2Glyph.sln" /p:Configuration=Release /p:Platform=x64
+msbuild "先ほど控えたフォルダパス\Physics1.sln" /p:Configuration=Release /p:Platform=x64
 ```
 大量の文が流れてきますが、そのまま入力待機状態になるまで待ちます。  
-ビルドが終了すると、Intermediate\P2Glyph_1\Release内にexeファイルが出来ています。  
-### このプログラムはフルスクリーンで実行されます。「Esc」キーを押すことでプログラムは終了します。また、5分が経過すると自動で終了するようにもなっています。  
+ビルドが終了すると、Intermediate\Physics1\Release内にexeファイルが出来ています。  
+### このプログラムはフルスクリーンで実行されます。  
+### 「Esc」キーを押すことでプログラムは終了します。  
+### また、5分が経過すると自動で終了するようにもなっています。  
 実行される画面のサイズ変更方法などはいずれ追記します。変更するのであれば意図する動作になるようにご自由にコードを書き換えてください。  
