@@ -1,0 +1,2 @@
+# Sban_Siv3D_Physics1
+すべあな2枠の物理演算パートをOpenSiv3Dで再現する
