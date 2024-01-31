@@ -2,6 +2,13 @@
 ## これ何？  
 全てあなたの所為です。氏の「..」の映像にあるような物理演算をOpenSiv3Dで再現するやつです。  
 
+## 必要環境  
+OS	Windows 10 (64-bit) / Windows 11  
+CPU	Intel または AMD 製の CPU  
+映像出力	モニタなど、何らかの映像出力装置があること  
+その他 Build Tools for Visual Studio 2022,VSCodeなどのテキストエディタなど
+(インストーラ内で「C++ によるデスクトップ開発」を追加インストールしてください)
+
 ## 使い方  
 ### Build Tools for Visual Studio 2022のインストール  
 まず以下のリンクからBuild Tools for Visual Studio 2022をダウンロードします。  
@@ -14,7 +21,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.13)をダウンロード、実行します。  
 詳細はリンク先に記載されていますので、そちらに従ってください。  
   
-ここで再起動をしておいたほうがいいかもしれません。  
+ここで再起動をします。  
   
 ### ソースコードのダウンロード、配置  
 次に、[こちら](https://github.com/0x-sinsu/Sban_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
