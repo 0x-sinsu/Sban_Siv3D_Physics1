@@ -159,7 +159,7 @@ void Main()
 	// fontPathは使用したいフォントファイルのパスです。区切りには「/」or「\\」を使用します。
 	// ヒラギノに類似するフォントである源ノ角ゴシックのダウンロード先はこちら:https://github.com/adobe-fonts/source-han-sans/tree/release/OTF/Japanese
 	const int fontSize = 40;
-	const char32_t* fontPath = U"C:/VisualStudioProject/P2Glyph_1/SourceHanSansJP-Heavy.otf";
+	const char32_t* fontPath = U"fontfilepath(絶対パス,拡張子含む)";
 	const Font font{ fontSize, fontPath };
 
 	Window::SetFullscreen(true);
