@@ -6,8 +6,8 @@
 OS	Windows 10 (64-bit) / Windows 11  
 CPU	Intel または AMD 製の CPU  
 映像出力	モニタなど、何らかの映像出力装置があること  
-その他 Build Tools for Visual Studio 2022,VSCodeなどのテキストエディタなど
-(インストーラ内で「C++ によるデスクトップ開発」を追加インストールしてください)
+開発環境 Build Tools for Visual Studio 2022  
+(インストーラ内で「C++ によるデスクトップ開発」を追加インストールしてください),VSCodeなどのテキストエディタなど
 
 ## 使い方  
 ### Build Tools for Visual Studio 2022のインストール  
