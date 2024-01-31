@@ -1,4 +1,4 @@
-# Sban_Physics1  
+# Sban_Siv3D_Physics1  
 ## これ何？  
 全てあなたの所為です。氏の「..」の映像にあるような物理演算をOpenSiv3Dで再現するやつです。  
 
