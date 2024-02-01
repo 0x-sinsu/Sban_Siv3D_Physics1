@@ -1,20 +1,4 @@
-﻿# include <Siv3D.hpp> // Siv3D v0.6.13
-# include <chrono>
-# include <future>
-# include <atomic>
-
-int main() {
-	// 終了フラグ
-	std::atomic<bool> done(false);
-
-	// 5分後に終了フラグをセットする非同期タスク
-	auto future = std::async(std::launch::async, [&done]() {
-		std::this_thread::sleep_for(std::chrono::minutes(5));
-		done = true;
-	});
-
-	return 0;
-}
+# include <Siv3D.hpp> // Siv3D v0.6.13
 
 /// @brief 文字
 struct P2Glyph
@@ -34,6 +18,9 @@ struct P2Glyph
 	/// @brief 落ちる順番
 	int32 order = 0;
 
+	// 2D 物理演算のワールド
+	P2World world;
+
 	void draw(const ColorF& color) const
 	{
 		if (body)
@@ -43,37 +30,6 @@ struct P2Glyph
 		}
 	}
 };
-
-/// @brief 文字にかかるブラックホールの力を計算します。
-/// @param blackHolePos ブラックホールの位置
-/// @param pos 文字の位置
-/// @return ブラックホールの力
-Vec2 GetForceToBlackHole(const Vec2& blackHolePos, const Vec2& pos)
-{
-	const Vec2 v = (blackHolePos - pos);
-	const Vec2 dir = v.normalized();
-	const double distance = Max((v.length() / 100.0), 0.5); // ブラックホールまでの距離（m）
-
-	if (2.0 < distance) // 2m 以上離れている場合は力が働かない
-	{
-		return Vec2{ 0, 0 };
-	}
-
-	return (dir * 1600 / (distance * distance)); // 距離の二乗に反比例して力が強くなる
-}
-Vec2 GetForceToBlackHole2(const Vec2& blackHolePos2, const Vec2& pos)
-{
-	const Vec2 v = (blackHolePos2 - pos);
-	const Vec2 dir = v.normalized();
-	const double distance = Max((v.length() / 100.0), 0.5); // ブラックホールまでの距離（m）
-
-	if (2.0 < distance) // 2m 以上離れている場合は力が働かない
-	{
-		return Vec2{ 0, 0 };
-	}
-
-	return (dir * 1600 / (distance * distance)); // 距離の二乗に反比例して力が強くなる
-}
 
 /// @brief 物理演算用に多角形の凸包を計算します。
 /// @param polygons 多角形
@@ -119,6 +75,7 @@ static Array<P2Glyph> GenerateGlyphs(const Vec2& bottomCenter, const Font& font,
 			const auto& polygonGlyph = polygonGlyphs[i];
 			// ↓ここを編集します。1.25は漢字、1.0はひらがなです。漢字側の比率を調節してください。
 			const double scale = (isKanji[i] ? 1.25 : 1.0);
+
 			P2Glyph glyph;
 			glyph.polygons = polygonGlyph.polygons.scaled(scale);
 			glyph.convexHull = CalculateConvexHull(polygonGlyph.polygons);
@@ -181,6 +138,32 @@ void Main()
 	// 2D 物理演算のワールド
 	P2World world{ BaseGravity };
 
+	// 画面の幅と高さ
+	const double screenWidth = Scene::Width();
+	const double screenHeight = Scene::Height();
+
+	//	↓ここを編集します。固定するテキストを記述します。
+	const Array<String> fixedtext =
+	{
+		// template
+		U"全てあなたの所為です。",
+	};
+	// テキストの幅と高さを計算
+	const double textWidth = font(fixedtext).region().w;
+	const double textHeight = font(fixedtext).region().h;
+
+	// テキストを画面の中央に配置するための座標を計算
+	const Vec2 textPos((screenWidth - textWidth) / 2, (screenHeight - textHeight) / 2);
+
+	// 出力されたP2Glyphの配列を処理して物理ワールドに追加する例
+	Array<P2Glyph> glyph2 = GenerateGlyphs(Vec2{ 0, 0 }, font, fixedtext);
+
+	for (auto& glyph : glyph2)
+	{
+		// 物理ボディを物理ワールドに追加
+		glyph.body = world.createPolygon(P2Static, glyph.initialPos, glyph.convexHull);
+	}
+
 	// 歌詞
 	// ここを編集します。文法は次の通りです:
 	// U"歌詞",
@@ -199,61 +182,14 @@ void Main()
 
 	Camera2D camera{ Vec2{ 0, 0 }, 1.0 };
 
-	// ブラックホールの位置
-	Vec2 blackHolePos{ -200, -150 };
-	Vec2 blackHolePos2{ Scene::Width() + 200, -150 }; // 右端から開始
-
 	// 何番まで登場しているか
 	int32 activeOrder = 0;
 
 	// 各行の登場タイミングを決めるためのストップウォッチ
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
-	// 文字(ブラックホール)の移動速度（ピクセル/フレーム）
-	double dotSpeed = 0; // 初速度は0に設定
-	// 文字(ブラックホール)の加速度（ピクセル/フレーム^2）
-	const double dotAcceleration = 0.02; // 1フレームごとに加速する量
-
-	// 文字(ブラックホール)の初期位置
-	Vec2 dotPos(0, Scene::Height() * 0.5);
-	Vec2 dotPos2(Scene::Width(), Scene::Height() * 0.5);
-
-	// 衝突したかどうかのフラグ
-	bool isCollided = false;
-
-	// 衝突後の文字の角度と速度
-	// ここ(2行)を編集します。1行目は文字の角度です。
-	// 2行目は文字の速度です。
-	double collisionAngle = 0.0;
-	double collisionSpeed = 0.02;
-
-	// ここを編集します。負の値が大きいほど左右から出てくる文字が衝突後、より上に向かう...はずです。
-	const double upwardForce = -1.0; // 上向きの力（負の値で上に向かう）
-
 	while (System::Update())
 	{
-		// 衝突検出
-		if (Abs(dotPos.x - dotPos2.x) < 10 && Abs(dotPos.y - dotPos2.y) < 10 && !isCollided)
-		{
-			isCollided = true;
-			collisionSpeed *= 0.05;
-			collisionAngle = Random(Math::Pi * 0.75, Math::Pi * 1.25); // 上向きに衝突角を制限
-		}
-
-		// 衝突後の動き
-		if (isCollided)
-		{
-			// より上向きに強くするために、角度を小さめに増やす
-			collisionAngle += 0.05;
-
-			// 上向きの力を加えながら、角度に沿って動かす
-			dotPos.x += collisionSpeed * std::cos(collisionAngle);
-			dotPos.y += collisionSpeed * std::sin(collisionAngle) + upwardForce;
-
-			// 衝突後は、dotPos2もdotPosに追従させる
-			dotPos2 = dotPos;
-		}
-
 		// Escキーで終了
 		if (KeyEscape.pressed())
 		{
@@ -286,33 +222,6 @@ void Main()
 			}
 		}
 
-		for (accumulatedTime += (Scene::DeltaTime() * Speed); StepTime <= accumulatedTime; accumulatedTime -= StepTime)
-		{
-			// 2D 物理演算のワールドを StepTime 秒進める
-			world.update(StepTime);
-
-			for (auto& glyph : glyphs)
-			{
-				// 文字にかかるブラックホールからの力を計算する
-				const Vec2 force1 = GetForceToBlackHole(blackHolePos, glyph.body.getPos());
-				const Vec2 force2 = GetForceToBlackHole(blackHolePos2, glyph.body.getPos());
-
-				// 文字に力を加える
-				glyph.body.applyForce(force1 + force2); // 両方の力を合成して適用
-			}
-		}
-
-		// 画面の幅と高さを取得
-		const double screenWidth = Scene::Width();
-		const double screenHeight = Scene::Height();
-
-		// 文字(ブラックホール)の速度を加速度分だけ増加させる
-		dotSpeed += dotAcceleration;
-
-		// 文字(ブラックホール)の位置を更新する
-		dotPos.x += dotSpeed;
-		dotPos2.x -= dotSpeed;
-
 		camera.update();
 		{
 			const auto t = camera.createTransformer();
@@ -322,22 +231,17 @@ void Main()
 			{
 				glyph.draw(ColorF{ 0.93 });
 			}
+			for (const auto& glyph : glyph2)
+			{
+				glyph.draw(ColorF{ 0.93 });
+			}
 		}
 
-		// ブラックホールの位置を更新
-		blackHolePos = camera.getCenter() + Vec2(dotPos.x - Scene::Width() * 0.5, 0);
-		blackHolePos2 = camera.getCenter() + Vec2(dotPos2.x - Scene::Width() * 0.5, 0);
-
-		// 文字を描画（カメラ座標を考慮せずスクリーン座標で描画）
-		// ここを編集します。U"文字"です。動かしたい文字(横から出てくる文字)を入力します。
-		// 別の場所(もっと下)から出したいなどの場合は説明が長くなってしまうため各自で調べてください。
-		font(U".").drawAt(dotPos, Palette::White);
-		font(U".").drawAt(dotPos2, Palette::White);
-
-		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
-		Circle(dotPos, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
-		Circle(dotPos2, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
-
+		for (accumulatedTime += (Scene::DeltaTime() * Speed); StepTime <= accumulatedTime; accumulatedTime -= StepTime)
+		{
+			// 2D 物理演算のワールドを StepTime 秒進める
+			world.update(StepTime);
+		}
 
 		// 2D カメラの操作を描画する
 		camera.draw(Palette::Orange);
