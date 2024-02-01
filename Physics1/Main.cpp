@@ -1,18 +1,5 @@
 # include <Siv3D.hpp> // Siv3D v0.6.13
 
-int main() {
-	// 終了フラグ
-	std::atomic<bool> done(false);
-
-	// 5分後に終了フラグをセットする非同期タスク
-	auto future = std::async(std::launch::async, [&done]() {
-		std::this_thread::sleep_for(std::chrono::minutes(5));
-		done = true;
-	});
-
-	return 0;
-}
-
 /// @brief 文字
 struct P2Glyph
 {
