@@ -25,13 +25,13 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.13)をダウンロード、実行します。  
 詳細はリンク先に記載されていますので、そちらに従ってください。  
   
-ここで再起動をします。  
+ここで必ず再起動を行います。 
   
 ### ソースコードのダウンロード、配置  
 次に、[こちら](https://github.com/0x-sinsu/Sban_Siv3D_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
 (gitでも問題なし)  
 任意のフォルダに配置します。  
-Physics1.slnがあるフォルダのパスを控えておきます。  
+SbanPhysics1.slnがあるフォルダのパスを控えておきます。  
 次に、Main.cppをVSCodeなどで開きます。
 編集する箇所をコメントアウトで示していますので、それを参考に編集してください。  
 編集する部分の大まかな行は、
@@ -48,13 +48,19 @@ Twitter:[@0x_sinsu](https://twitter.com/0x_sinsu)
 Discord:subete_light  
   
 ### ビルド
+build.batを実行します。
+しばらく待つと入力待機状態になりますので、そうなったらビルド完了です。
+ビルドが終了すると、Intermediate\Physics1\Release内にSbanPhysics1.exeファイルが出来ています。 
+
+---以下は以前のビルド方法です---
 次にスタートメニューで「x64 Native Tools Command Prompt for VS 2022」と検索し、出てきたものを実行します。  
 そこに以下のコマンドを貼り付け、実行します。  
 ```Batchfile
-msbuild "先ほど控えたフォルダパス\Physics1.sln" /p:Configuration=Release /p:Platform=x64
+msbuild "先ほど控えたフォルダパス\SbanPhysics1.sln" /p:Configuration=Release /p:Platform=x64
 ```
 大量の文が流れてきますが、そのまま入力待機状態になるまで待ちます。  
-ビルドが終了すると、Intermediate\Physics1\Release内にexeファイルが出来ています。  
+---以前のビルド方法も使用することが可能です---
+  
 ### このプログラムはフルスクリーンで実行されます。  
 ### 「Esc」キーを押すことでプログラムは終了します。  
 実行される画面のサイズ変更方法などはいずれ追記します。変更するのであれば意図する動作になるようにご自由にコードを書き換えてください。  
