@@ -28,7 +28,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 ここで再起動をします。  
   
 ### ソースコードのダウンロード、配置  
-次に、[こちら](https://github.com/0x-sinsu/Sban_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
+次に、[こちら](https://github.com/0x-sinsu/Sban_Siv3D_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
 (gitでも問題なし)  
 任意のフォルダに配置します。  
 Physics1.slnがあるフォルダのパスを控えておきます。  
