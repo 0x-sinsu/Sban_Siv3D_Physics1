@@ -22,11 +22,8 @@ std::string readCharacter(const std::string& filename) {
 }
 
 int main() {
-    // コンソールの入出力をUTF-8に設定
-    system("chcp 65001");
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-    setlocale(LC_ALL, ".UTF-8");
 
     // 作業ディレクトリの取得
     wchar_t exePath[MAX_PATH];
@@ -60,7 +57,7 @@ int main() {
     std::cin >> font_size;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cout << u8"新しいフォントパスを入力してください(区切りは/,パスに空白を含む場合ダブルクオーテーションで囲います): ";
+    std::cout << u8"新しいフォントパスを入力してください(区切りは/,ダブルクオーテーションは自動で付加されるため不要): ";
     std::getline(std::cin, font_path);
 
     std::cout << u8"移動速度を入力してください(標準値:1.5): ";
