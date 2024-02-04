@@ -6,11 +6,10 @@ for /f "usebackq tokens=*" %%i in (`vswhere -latest -products * -requires Micros
 )
 
 if not exist "%MSBUILD_PATH%" (
-    echo MSBuild のパスが見つかりませんでした。
+    echo Path to MSBuild not found.
     exit /b 1
 )
 
-:: MSBuild でビルドを実行
 "%MSBUILD_PATH%" SbanPhysics1.sln /p:Configuration=Release /p:Platform="x64"
 
 endlocal
