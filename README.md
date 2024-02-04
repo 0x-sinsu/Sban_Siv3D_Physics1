@@ -31,6 +31,9 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 次に、[こちら](https://github.com/0x-sinsu/Sban_Siv3D_Physics1)のページの「Code」をクリック、「Download ZIP」をクリックしてダウンロードします。  
 (gitでも問題なし)  
 任意のフォルダに配置します。  
+
+
+---以下は以前の編集方法です---
 SbanPhysics1.slnがあるフォルダのパスを控えておきます。  
 次に、Main.cppをVSCodeなどで開きます。
 編集する箇所をコメントアウトで示していますので、それを参考に編集してください。  
