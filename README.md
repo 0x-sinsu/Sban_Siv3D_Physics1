@@ -2,6 +2,8 @@
 ## これ何？  
 全てあなたの所為です。氏の「..」の映像にあるような物理演算をOpenSiv3Dで再現するやつです。  
 
+ざっくり使い方解説動画(一部手順省略)  
+https://youtu.be/9nU0-o6zS4A
 ## 必要環境  
 OS	Windows 10 (64-bit) / Windows 11  
 CPU	Intel または AMD 製の CPU  
