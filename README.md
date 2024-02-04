@@ -19,7 +19,6 @@ CPU	Intel または AMD 製の CPU
 https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2022  
 ダウンロードされたファイルを実行します。  
 続行→C++によるデスクトップ開発にチェックを入れる→インストール  
-分かりづらい場合は[こちら](https://www.kkaneko.jp/tools/win/buildtool2022.html)などが参考になると思います。  
   
 ### OpenSiv3Dのインストール  
 次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.13)をダウンロード、実行します。  
