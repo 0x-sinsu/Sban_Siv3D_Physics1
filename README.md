@@ -2,6 +2,8 @@
 ## これ何？  
 全てあなたの所為です。氏の「..」の映像にあるような物理演算をOpenSiv3Dで再現するやつです。  
 
+ざっくり使い方解説動画(一部手順省略)  
+https://youtu.be/9nU0-o6zS4A
 ## 必要環境  
 OS	Windows 10 (64-bit) / Windows 11  
 CPU	Intel または AMD 製の CPU  
@@ -63,7 +65,7 @@ Discord:subete_light
 ### ビルド  
 build.batを実行します。  
 しばらく待つと入力待機状態になりますので、そうなったらビルド完了です。  
-ビルドが終了すると、Intermediate\Physics1\Release内にSbanPhysics1.exeファイルが出来ています。  
+ビルドが終了すると、Intermediate\SbanPhysics1\Release内にSbanPhysics1.exeファイルが出来ています。  
 ここでリアルタイム保護を有効に戻します。  
 
 ---以下は以前のビルド方法です---  
