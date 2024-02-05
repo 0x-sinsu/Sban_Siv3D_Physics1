@@ -23,7 +23,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 続行→C++によるデスクトップ開発にチェックを入れる→インストール  
   
 ### OpenSiv3Dのインストール  
-次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.13)をダウンロード、実行します。  
+次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.14)をダウンロード、実行します。  
 詳細はリンク先に記載されていますので、そちらに従ってください。  
   
 ここで必ず再起動を行います。 
@@ -42,6 +42,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 それでも不安な場合はedit.cppを各自コンパイルしてください。  
 コンパイル方法は割愛します。  
 edit.exeを開いたら、指示に従い数値を入力します。  
+(標準値というのはあくまでも私がテストした時点でいい感じだった値ですので参考程度にしてください)  
 この後のbuild.batを実行する際もリアルタイム保護の無効化が必要なため、まだ無効化のままにしておきます。  
 (本当はリアルタイム保護無効化させたくないんですがウイルスと誤判定されてしまうので...)  
   
