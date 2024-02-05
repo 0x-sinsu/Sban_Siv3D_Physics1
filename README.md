@@ -1,11 +1,12 @@
 # Sban_Siv3D_Physics1  
 ## これ何？  
 全てあなたの所為です。氏の「..」の映像にあるような物理演算をOpenSiv3Dで再現するやつです。  
+此のプログラムは一個人が趣味で作ったものです。プログラムを使用したことによって何らかの問題が発生しても、私は一切責任を負いません。  
 
 ざっくり使い方解説動画(一部手順省略)  
 https://youtu.be/9nU0-o6zS4A
 ## 必要環境  
-OS	Windows 10 (64-bit) / Windows 11  
+OS	Windows 11(10でも動くと思いますがテストしていないので保証できません)  
 CPU	Intel または AMD 製の CPU  
 映像出力	モニタなど、何らかの映像出力装置があること  
 開発環境 Build Tools for Visual Studio 2022  
@@ -23,7 +24,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 続行→C++によるデスクトップ開発にチェックを入れる→インストール  
   
 ### OpenSiv3Dのインストール  
-次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月1日現在v0.6.14)をダウンロード、実行します。  
+次に、[こちら](https://siv3d.github.io/ja-jp/)からOpenSiv3D(2024年2月6日現在v0.6.14)をダウンロード、実行します。  
 詳細はリンク先に記載されていますので、そちらに従ってください。  
   
 ここで必ず再起動を行います。 
