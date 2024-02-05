@@ -1,4 +1,4 @@
-﻿# include <Siv3D.hpp> // Siv3D v0.6.13
+﻿# include <Siv3D.hpp> // Siv3D v0.6.14
 
 int main() {
 	// 終了フラグ
@@ -298,10 +298,6 @@ void Main()
 				glyph.body.applyForce(force1 + force2); // 両方の力を合成して適用
 			}
 		}
-
-		// 画面の幅と高さを取得
-		const double screenWidth = Scene::Width();
-		const double screenHeight = Scene::Height();
 
 		// 文字(ブラックホール)の速度を加速度分だけ増加させる
 		dotSpeed += dotAcceleration;

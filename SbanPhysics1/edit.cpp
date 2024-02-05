@@ -45,8 +45,7 @@ int main() {
     std::string lyrics_path = "lyrics.txt"; // 歌詞ファイルのパス
 
     // ユーザー入力の受け取り
-    double scale_value, speed_value,cangle_value,cspeed_value;
-    int font_size;
+    double scale_value, speed_value,cangle_value,cspeed_value,font_size,force_value;
     std::string font_path;
 
     std::cout << u8"ひらがなを1とした場合の漢字の比率(標準値:1.25): ";
@@ -60,7 +59,7 @@ int main() {
     std::cout << u8"新しいフォントパスを入力してください(区切りは/,ダブルクオーテーションは自動で付加されるため不要): ";
     std::getline(std::cin, font_path);
 
-    std::cout << u8"移動速度を入力してください(標準値:1.5): ";
+    std::cout << u8"シミュレーション速度を入力してください(標準値:1.5): ";
     std::cin >> speed_value;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -70,6 +69,10 @@ int main() {
 
     std::cout << u8"左右から出てくる文字のスピードを入力してください(標準値:0.02):";
     std::cin >> cspeed_value;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	std::cout << u8"左右から出てくる文字の上向きの力を入力してください(負の値が大きいほど上に上がるはず(?),標準値:-1.0):";
+    std::cin >> force_value;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     // 左右の文字をファイルから読み込む
@@ -115,8 +118,8 @@ int main() {
             lines.push_back("\tconst char32_t* fontPath = U\"" + font_path + "\";");
             continue;
         }
-        if (line.find("constexpr double speed =") != std::string::npos) {
-            lines.push_back("\tconstexpr double speed = " + std::to_string(speed_value) + ";");
+        if (line.find("constexpr double Speed = ") != std::string::npos) {
+            lines.push_back("\tconstexpr double Speed = " + std::to_string(speed_value) + ";");
             continue;
         }
         if (line.find("double collisionAngle = ") != std::string::npos) {
@@ -127,10 +130,10 @@ int main() {
             lines.push_back("\tdouble collisionSpeed = " + std::to_string(cspeed_value) + ";");
             continue;
         }
-        if (line.find("double collisionSpeed = ") != std::string::npos) {
-            lines.push_back("\tdouble collisionSpeed = " + std::to_string(cspeed_value) + ";");
-            continue;
-        }
+        if (line.find("const double upwardForce = ") != std::string::npos) {
+			lines.push_back("\tconst double upwardForce = " + std::to_string(force_value) + ";");
+			continue;
+		}
         std::regex pattern1(R"(font\(U"\."\).drawAt\(dotPos, Palette::White\);)");
         std::string replacement1 = "\t\tfont(U\"" + left_character + "\").drawAt(dotPos, Palette::White);";
         line = std::regex_replace(line, pattern1, replacement1);
@@ -182,7 +185,7 @@ int main() {
     }
 
     std::cout << u8"ファイルが編集されました。" << std::endl;
-    std::cout << u8"比率が " << scale_value << " に、フォントサイズが " << font_size << " に、移動速度が " << speed_value << " に、フォントパスが " << font_path << " に、左右から出てくる文字の角度が " << cangle_value << " に、左右から出てくる文字のスピードが " << cspeed_value << " に、左から出てくる文字が " << left_character << " に、右から出てくる文字が " << right_character << " に更新されました。" << std::endl;
+    std::cout << u8"比率が " << scale_value << " に、\nフォントサイズが " << font_size << " に、\nシミュレーション速度が " << speed_value << " に、\nフォントパスが " << font_path << " に、\n左右から出てくる文字の角度が " << cangle_value << " に、\n左右から出てくる文字のスピードが " << cspeed_value << " に、\n左右から出てくる文字の上向きの力が " << force_value << " に更新されました。" << std::endl;
 
     std::cout << "終了するにはEnterキーを入力..." << std::endl;
     std::cin.get();
