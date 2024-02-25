@@ -66,7 +66,7 @@ Discord:subete_light
   
 ### ビルド  
 build.batを実行します。  
-しばらく待つと入力待機状態になりますので、そうなったらビルド完了です。  
+しばらく待つとコマンドプロンプトが閉じますので、そうなったらビルド完了です。  
 ビルドが終了すると、Intermediate\SbanPhysics1\Release内にSbanPhysics1.exeファイルが出来ています。  
 ここでリアルタイム保護を有効に戻します。  
 
