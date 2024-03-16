@@ -106,8 +106,8 @@ int main() {
     std::string line;
     bool is_inside_lyrics_block = false;
     while (std::getline(file, line)) {
-        if (line.find("const double scale =") != std::string::npos) {
-            lines.push_back("\t\t\tconst double scale = " + std::to_string(scale_value) + ";");
+        if (line.find("const double scale = (isKanji[i] ? ") != std::string::npos) {
+            lines.push_back("\t\t\tconst double scale = (isKanji[i] ? " + std::to_string(scale_value) + " : 1.0);");
             continue;
         }
         if (line.find("const int fontSize =") != std::string::npos) {
