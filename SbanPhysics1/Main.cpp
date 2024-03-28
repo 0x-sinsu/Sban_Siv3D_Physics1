@@ -330,9 +330,5 @@ void Main()
 		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
 		Circle(dotPos, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
 		Circle(dotPos2, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
-
-
-		// 2D カメラの操作を描画する
-		camera.draw(Palette::Orange);
 	}
 }
