@@ -36,6 +36,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 次に、lyrics.txtに上から降らせる歌詞を入力し、保存します。(文字エンコーディングはUTF-8)  
 次に、right.txtに右から出てくる文字を、left.txtに左から出てくる文字を入力、保存します。(こちらもUTF-8)  
 次にSbanPhysics1/edit.exeを実行する  
+↓誤判定された場合のみで良いと思います
 (のですが、現在ウイルスと誤判定されてしまうようですので[こちら](https://support.microsoft.com/ja-jp/windows/windows-%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E3%81%AB%E3%82%88%E3%82%8B%E4%BF%9D%E8%AD%B7%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%BE%E3%81%99-2ae0363d-0ada-c064-8b56-6a39afb6a963)のサイトの下の方に記載されている  
 "リアルタイム保護を一時的に無効にする"  
 の手順に従い無効化します。  
@@ -69,7 +70,7 @@ Discord:subete_light
 build.batを実行します。  
 しばらく待つとコマンドプロンプトが閉じますので、そうなったらビルド完了です。  
 ビルドが終了すると、Intermediate\SbanPhysics1\Release内にSbanPhysics1.exeファイルが出来ています。  
-ここでリアルタイム保護を有効に戻します。  
+(ここでリアルタイム保護を有効に戻します。)  
 
 ---以下は以前のビルド方法です---  
 次にスタートメニューで「x64 Native Tools Command Prompt for VS 2022」と検索し、出てきたものを実行します。  
@@ -81,6 +82,15 @@ msbuild "先ほど控えたフォルダパス\SbanPhysics1.sln" /p:Configuration
   
 ### このプログラムはフルスクリーンで実行されます。  
 ### 「Esc」キーを押すことでプログラムは終了します。  
-実行される画面のサイズ変更方法などはいずれ追記します。変更するのであれば意図する動作になるようにご自由にコードを書き換えてください。  
-
+追記:実行される画面のサイズ変更方法  
+149行目付近の
+```cpp:149.cpp
+Window::SetFullscreen(true);
+```
+の部分を、1280*720にする時は
+```cpp:720p.cpp
+Window::Resize(1280, 720);
+```
+のように記述すると動くはずです。多分ね...  
+  
 vswhereを使用しています:https://github.com/microsoft/vswhere
