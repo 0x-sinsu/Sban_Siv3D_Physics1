@@ -61,9 +61,6 @@ SbanPhysics1.slnがあるフォルダのパスを控えておきます。
 231行目
 334行目
 辺りです。  
-分からない所があればTwitterのDMやDiscordまでどうぞ。  
-Twitter:[@0x_sinsu](https://twitter.com/0x_sinsu)  
-Discord:subete_light  
   
 ### ビルド  
 build.batを実行します。  
