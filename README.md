@@ -36,7 +36,7 @@ https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2
 次に、lyrics.txtに上から降らせる歌詞を入力し、保存します。(文字エンコーディングはUTF-8)  
 次に、right.txtに右から出てくる文字を、left.txtに左から出てくる文字を入力、保存します。(こちらもUTF-8)  
 次にSbanPhysics1/edit.exeを実行する  
-↓誤判定された場合のみで良いと思います
+↓誤判定された場合のみで良いと思います  
 (のですが、現在ウイルスと誤判定されてしまうようですので[こちら](https://support.microsoft.com/ja-jp/windows/windows-%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E3%81%AB%E3%82%88%E3%82%8B%E4%BF%9D%E8%AD%B7%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%BE%E3%81%99-2ae0363d-0ada-c064-8b56-6a39afb6a963)のサイトの下の方に記載されている  
 "リアルタイム保護を一時的に無効にする"  
 の手順に従い無効化します。  
