@@ -1,4 +1,8 @@
-﻿# include <Siv3D.hpp> // Siv3D v0.6.14
+﻿#include <Siv3D.hpp> // Siv3D v0.6.14
+#include <iostream>
+#include <fstream>
+#include <unordered_map>
+
 
 /// @brief 文字
 struct P2Glyph
@@ -77,6 +81,44 @@ static Polygon CalculateConvexHull(const MultiPolygon& polygons)
 	return Geometry2D::ConvexHull(points).simplified();
 }
 
+// 設定を読み込む関数
+std::unordered_multimap<std::string, std::string> LoadSettings(const std::string& settingsFilePath) {
+	std::unordered_multimap<std::string, std::string> settings;
+	std::ifstream file(settingsFilePath);
+	std::string line;
+
+	while (std::getline(file, line)) {
+		auto delimiterPos = line.find('=');
+		if (delimiterPos != std::string::npos) {
+			std::string key = line.substr(0, delimiterPos);
+			std::string value = line.substr(delimiterPos + 1);
+			settings.insert({ key, value });
+		}
+	}
+	return settings;
+}
+
+s3d::Array<std::string> LoadText(const std::string& filePath) {
+	s3d::Array<std::string> lines;
+	std::ifstream file(filePath);
+	std::string line;
+
+	while (std::getline(file, line)) {
+		lines.push_back(line);
+	}
+	return lines;
+}
+
+// std::vector<std::string> を s3d::Array<s3d::String> に変換する関数
+s3d::Array<s3d::String> ConvertToS3DArray(const std::vector<std::string>& stdVector) {
+	s3d::Array<s3d::String> s3dArray;
+	for (const auto& stdString : stdVector) {
+		// s3d::String への変換を明示的に行います。
+		s3dArray.push_back(s3d::Unicode::FromUTF8(stdString));
+	}
+	return s3dArray;
+}
+
 /// @brief 各文字を生成します。
 /// @param bottomCenter 最下層の中心位置
 /// @param font フォント
@@ -101,8 +143,7 @@ static Array<P2Glyph> GenerateGlyphs(const Vec2& bottomCenter, const Font& font,
 		for (size_t i = 0; i < polygonGlyphs.size(); ++i)
 		{
 			const auto& polygonGlyph = polygonGlyphs[i];
-			// ↓ここを編集します。1.25は漢字、1.0はひらがなです。漢字側の比率を調節してください。
-			const double scale = (isKanji[i] ? 1.25 : 1.0);
+			const double scale = (isKanji[i] ? 1.0 : 1.0);
 			P2Glyph glyph;
 			glyph.polygons = polygonGlyph.polygons.scaled(scale);
 			glyph.convexHull = CalculateConvexHull(polygonGlyph.polygons);
@@ -139,19 +180,88 @@ static Array<P2Glyph> GenerateGlyphs(const Vec2& bottomCenter, const Font& font,
 
 void Main()
 {
-	// ↓ここ(2行)を編集します。fontSizeは基準となるフォントサイズです。先程の比率はこれに基づきます。
-	// fontPathは使用したいフォントファイルのパスです。区切りには「/」or「\\」を使用します。
-	// ヒラギノに類似するフォントである源ノ角ゴシックのダウンロード先はこちら:https://github.com/adobe-fonts/source-han-sans/tree/release/OTF/Japanese
-	const int fontSize = 40;
-	const char32_t* fontPath = U"C:/VisualStudioProject/P2Glyph_1/SourceHanSansJP-Heavy.otf";
-	const Font font{ fontSize, fontPath };
-
+	// フルスクリーン
 	Window::SetFullscreen(true);
 	Scene::SetBackground(ColorF{ 0.0 });
 
+	// std::unordered_multimapの初期化
+	std::unordered_multimap<std::string, std::string> settingsMap;
+
+	// 設定ファイルのパス
+	const std::string settingsFilePath = "./settings.conf";
+
+	// 設定を読み込む
+	auto settings = LoadSettings(settingsFilePath);
+
+	// 設定ファイルの内容を取得
+	std::string fontPath;
+	auto itFont = settings.find("fontPath");
+	if (itFont != settings.end()) {
+		fontPath = itFont->second;
+	}
+
+	std::string fontSize;
+	auto itFontSize = settings.find("fontSize");
+	if (itFontSize != settings.end()) {
+		fontSize = itFontSize->second;
+	}
+
+	s3d::Array<std::string> texts;
+	auto itLyrics = settings.find("lyricsPath");
+	if (itLyrics != settings.end()) {
+		texts = LoadText(itLyrics->second);
+	}
+
+	s3d::Array<std::string> left;
+	auto itleft = settings.find("left");
+	if (itleft != settings.end()) {
+		left = LoadText(itleft->second);
+	}
+
+	s3d::Array<std::string> light;
+	auto itlight = settings.find("light");
+	if (itlight != settings.end()) {
+		light = LoadText(itlight->second);
+	}
+
+	std::string simulationSpeed;
+	auto itsimulationSpeed = settings.find("simulationSpeed");
+	if (itsimulationSpeed != settings.end()) {
+		simulationSpeed = itsimulationSpeed->second;
+	}
+
+	// s3d::Array<s3d::String> に変換
+	s3d::Array<s3d::String> s3dTexts = ConvertToS3DArray(texts);
+	s3d::Array<s3d::String> s3dLeft = ConvertToS3DArray(left);
+	s3d::Array<s3d::String> s3dLight = ConvertToS3DArray(light);
+
+	// s3d::Stringへ変換
+	s3d::String s3dFontPath = s3d::Unicode::FromUTF8(fontPath);
+
+	int intFontSize;
+	try {
+		intFontSize = std::stoi(fontSize);
+	}
+	catch (const std::exception) {
+		// 変換に失敗した場合の処理(70を使う)
+		intFontSize = 70;
+	}
+
+	// Fontオブジェクトを初期化
+	const Font font(intFontSize, s3dFontPath);
+
+	Array<P2Body> body;
+
 	// シミュレーションスピード
-	// ここを編集します。単純にスピードです。
-	constexpr double Speed = 1.5;
+	double Speed;
+	try {
+		if (!simulationSpeed.empty()) {
+			Speed = std::stod(simulationSpeed); // 文字列をdoubleに変換
+		}
+	}
+	catch (const std::exception& e) {
+		Speed = 1.75;
+	}
 
 	// 2D 物理演算のシミュレーションステップ（秒）
 	constexpr double StepTime = (1.0 / 200.0);
@@ -165,21 +275,7 @@ void Main()
 	// 2D 物理演算のワールド
 	P2World world{ BaseGravity };
 
-	// 歌詞
-	// ここを編集します。文法は次の通りです:
-	// U"歌詞",
-	// 「歌詞」の部分に上から落とす文字を入れます。
-	// 改行も可能です。
-	const Array<String> texts =
-	{
-		// template
-		U"心地よい音　頭蓋の中、",
-		U"ひとりでに骨が折れ、",
-		U"たわむれに描いた傘の中、",
-		U"全てあなたの所為です。",
-	};
-
-	Array<P2Glyph> glyphs = GenerateGlyphs(Vec2{ 0, -1100 }, font, texts);
+	Array<P2Glyph> glyphs = GenerateGlyphs(Vec2{ 0, -1100 }, font, s3dTexts);
 
 	Camera2D camera{ Vec2{ 0, 0 }, 1.0 };
 
@@ -195,6 +291,7 @@ void Main()
 
 	// 文字(ブラックホール)の移動速度（ピクセル/フレーム）
 	double dotSpeed = 0; // 初速度は0に設定
+
 	// 文字(ブラックホール)の加速度（ピクセル/フレーム^2）
 	const double dotAcceleration = 0.02; // 1フレームごとに加速する量
 
@@ -206,12 +303,9 @@ void Main()
 	bool isCollided = false;
 
 	// 衝突後の文字の角度と速度
-	// ここ(2行)を編集します。1行目は文字の角度です。
-	// 2行目は文字の速度です。
 	double collisionAngle = 0.0;
 	double collisionSpeed = 0.02;
 
-	// ここを編集します。負の値が大きいほど左右から出てくる文字が衝突後、より上に向かう...はずです。
 	const double upwardForce = -1.0; // 上向きの力（負の値で上に向かう）
 
 	while (System::Update())
@@ -308,11 +402,12 @@ void Main()
 		blackHolePos = camera.getCenter() + Vec2(dotPos.x - Scene::Width() * 0.5, 0);
 		blackHolePos2 = camera.getCenter() + Vec2(dotPos2.x - Scene::Width() * 0.5, 0);
 
-		// 文字を描画（カメラ座標を考慮せずスクリーン座標で描画）
-		// ここを編集します。U"文字"です。動かしたい文字(横から出てくる文字)を入力します。
-		// 別の場所(もっと下)から出したいなどの場合は説明が長くなってしまうため各自で調べてください。
-		font(U".").drawAt(dotPos, Palette::White);
-		font(U".").drawAt(dotPos2, Palette::White);
+		// dotPosで描画する文字
+		font(s3dLeft).drawAt(dotPos, Palette::White);
+
+		// dotPos2で描画する文字
+		font(s3dLight).drawAt(dotPos2, Palette::White);
+		
 
 		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
 		Circle(dotPos, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
