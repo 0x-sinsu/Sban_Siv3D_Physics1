@@ -332,12 +332,6 @@ void Main()
 			dotPos2 = dotPos;
 		}
 
-		// Escキーで終了
-		if (KeyEscape.pressed())
-		{
-			break;
-		}
-
 		{
 			// 何番まで登場させてよいかを計算する
 			const int32 t = static_cast<int32>(((stopwatch.ms() * Speed) - 800) / 500);
