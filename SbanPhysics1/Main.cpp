@@ -236,6 +236,12 @@ void Main()
 		simulationSpeed = itsimulationSpeed->second;
 	}
 
+	std::string frameRate;
+    auto itframeRate = settings.find("frameRate");
+    if (itframeRate != settings.end()) {
+		frameRate = itframeRate->second;
+	}
+
 	// s3d::Array<s3d::String> に変換
 	s3d::Array<s3d::String> s3dTexts = ConvertToS3DArray(texts);
 	s3d::Array<s3d::String> s3dLeft = ConvertToS3DArray(left);
@@ -267,6 +273,17 @@ void Main()
 	}
 	catch (const std::exception) {
 	}
+
+	// フレームレートを設定
+	int intFrameRate = 60;
+	if (!frameRate.empty()) {
+		try {
+			intFrameRate = std::stoi(frameRate);
+		} catch (const std::exception) {
+		}
+    }
+
+	int FPS = intFrameRate;
 
 	// 2D 物理演算のシミュレーションステップ（秒）
 	constexpr double StepTime = (1.0 / 200.0);
@@ -407,7 +424,6 @@ void Main()
 		// dotPos2で描画する文字
 		font(s3dRight).drawAt(dotPos2, Palette::White);
 		
-
 		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
 		Circle(dotPos, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
 		Circle(dotPos2, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
