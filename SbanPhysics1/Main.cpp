@@ -259,14 +259,13 @@ void Main()
 	Array<P2Body> body;
 
 	// シミュレーションスピード
-	double Speed;
+	double Speed = 1.75;
 	try {
 		if (!simulationSpeed.empty()) {
 			Speed = std::stod(simulationSpeed); // 文字列をdoubleに変換
 		}
 	}
-	catch (const std::exception& e) {
-		Speed = 1.75;
+	catch (const std::exception) {
 	}
 
 	// 2D 物理演算のシミュレーションステップ（秒）
