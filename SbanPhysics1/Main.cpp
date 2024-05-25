@@ -308,9 +308,6 @@ void Main()
 	// 何番まで登場しているか
 	int32 activeOrder = 0;
 
-	// 各行の登場タイミングを決めるためのストップウォッチ
-	Stopwatch stopwatch{ StartImmediately::Yes };
-
 	// 文字(ブラックホール)の移動速度（ピクセル/フレーム）
 	double dotSpeed = 0; // 初速度は0に設定
 
@@ -329,6 +326,12 @@ void Main()
 	double collisionSpeed = 0.02;
 
 	const double upwardForce = -1.0; // 上向きの力（負の値で上に向かう）
+
+	// 各行の登場タイミングを決めるためのストップウォッチ
+	Stopwatch stopwatch{StartImmediately::Yes};
+
+	Stopwatch sw;
+	sw.start();
 
 	while (System::Update())
 	{
@@ -427,5 +430,9 @@ void Main()
 		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
 		Circle(dotPos, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
 		Circle(dotPos2, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
+
+		while (sw.msF() < 1000.0 / FPS)
+                  ;
+		sw.restart();
 	}
 }
