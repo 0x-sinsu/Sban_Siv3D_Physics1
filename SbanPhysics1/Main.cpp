@@ -224,10 +224,10 @@ void Main()
 		left = LoadText(itleft->second);
 	}
 
-	s3d::Array<std::string> light;
-	auto itlight = settings.find("light");
-	if (itlight != settings.end()) {
-		light = LoadText(itlight->second);
+	s3d::Array<std::string> right;
+	auto itright = settings.find("right");
+	if (itright != settings.end()) {
+		right = LoadText(itright->second);
 	}
 
 	std::string simulationSpeed;
@@ -239,7 +239,7 @@ void Main()
 	// s3d::Array<s3d::String> に変換
 	s3d::Array<s3d::String> s3dTexts = ConvertToS3DArray(texts);
 	s3d::Array<s3d::String> s3dLeft = ConvertToS3DArray(left);
-	s3d::Array<s3d::String> s3dLight = ConvertToS3DArray(light);
+	s3d::Array<s3d::String> s3dRight = ConvertToS3DArray(right);
 
 	// s3d::Stringへ変換
 	s3d::String s3dFontPath = s3d::Unicode::FromUTF8(fontPath);
@@ -406,7 +406,7 @@ void Main()
 		font(s3dLeft).drawAt(dotPos, Palette::White);
 
 		// dotPos2で描画する文字
-		font(s3dLight).drawAt(dotPos2, Palette::White);
+		font(s3dRight).drawAt(dotPos2, Palette::White);
 		
 
 		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
