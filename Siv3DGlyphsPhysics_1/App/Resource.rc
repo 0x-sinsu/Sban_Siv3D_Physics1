@@ -112,9 +112,9 @@ Resource(engine/texture/box-shadow/8.png)
 //
 //	Icons
 //
-Resource(engine/font/fontawesome/fontawesome-brands.otf.zstdcmp)
-Resource(engine/font/fontawesome/fontawesome-solid.otf.zstdcmp)
-Resource(engine/font/materialdesignicons/materialdesignicons-webfont.ttf.zstdcmp)
+// Resource(engine/font/fontawesome/fontawesome-brands.otf.zstdcmp)
+// Resource(engine/font/fontawesome/fontawesome-solid.otf.zstdcmp)
+// Resource(engine/font/materialdesignicons/materialdesignicons-webfont.ttf.zstdcmp)
 
 //
 //	Sound Font
