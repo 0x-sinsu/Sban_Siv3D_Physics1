@@ -1,8 +1,5 @@
-﻿#include <Siv3D.hpp> // Siv3D v0.6.14
-#include <iostream>
+﻿#include <Siv3D.hpp>
 #include <fstream>
-#include <unordered_map>
-
 
 /// @brief 文字
 struct P2Glyph
@@ -180,6 +177,15 @@ static Array<P2Glyph> GenerateGlyphs(const Vec2& bottomCenter, const Font& font,
 
 void Main()
 {
+  auto result = System::MessageBoxOKCancel(
+      U"警告",
+      U"このプログラムはフルスクリーンで実行されます。\n("
+      U"ウィンドウで実行する場合はコードを書き換えてご自身でビルドしてください)"
+      U"\nEscキーを押すと終了します。\n実行してもよろしいですか？");
+  if (result == MessageBoxResult::Cancel) {
+    return;
+  }
+
 	// フルスクリーン
 	Window::SetFullscreen(true);
 	Scene::SetBackground(ColorF{ 0.0 });
@@ -218,10 +224,10 @@ void Main()
 		left = LoadText(itleft->second);
 	}
 
-	s3d::Array<std::string> light;
-	auto itlight = settings.find("light");
-	if (itlight != settings.end()) {
-		light = LoadText(itlight->second);
+	s3d::Array<std::string> right;
+	auto itright = settings.find("right");
+	if (itright != settings.end()) {
+		right = LoadText(itright->second);
 	}
 
 	std::string simulationSpeed;
@@ -230,10 +236,16 @@ void Main()
 		simulationSpeed = itsimulationSpeed->second;
 	}
 
+	std::string frameRate;
+    auto itframeRate = settings.find("frameRate");
+    if (itframeRate != settings.end()) {
+		frameRate = itframeRate->second;
+	}
+
 	// s3d::Array<s3d::String> に変換
 	s3d::Array<s3d::String> s3dTexts = ConvertToS3DArray(texts);
 	s3d::Array<s3d::String> s3dLeft = ConvertToS3DArray(left);
-	s3d::Array<s3d::String> s3dLight = ConvertToS3DArray(light);
+	s3d::Array<s3d::String> s3dRight = ConvertToS3DArray(right);
 
 	// s3d::Stringへ変換
 	s3d::String s3dFontPath = s3d::Unicode::FromUTF8(fontPath);
@@ -253,15 +265,25 @@ void Main()
 	Array<P2Body> body;
 
 	// シミュレーションスピード
-	double Speed;
+	double Speed = 1.75;
 	try {
 		if (!simulationSpeed.empty()) {
 			Speed = std::stod(simulationSpeed); // 文字列をdoubleに変換
 		}
 	}
-	catch (const std::exception& e) {
-		Speed = 1.75;
+	catch (const std::exception) {
 	}
+
+	// フレームレートを設定
+	int intFrameRate = 60;
+	if (!frameRate.empty()) {
+		try {
+			intFrameRate = std::stoi(frameRate);
+		} catch (const std::exception) {
+		}
+    }
+
+	int FPS = intFrameRate;
 
 	// 2D 物理演算のシミュレーションステップ（秒）
 	constexpr double StepTime = (1.0 / 200.0);
@@ -286,9 +308,6 @@ void Main()
 	// 何番まで登場しているか
 	int32 activeOrder = 0;
 
-	// 各行の登場タイミングを決めるためのストップウォッチ
-	Stopwatch stopwatch{ StartImmediately::Yes };
-
 	// 文字(ブラックホール)の移動速度（ピクセル/フレーム）
 	double dotSpeed = 0; // 初速度は0に設定
 
@@ -307,6 +326,12 @@ void Main()
 	double collisionSpeed = 0.02;
 
 	const double upwardForce = -1.0; // 上向きの力（負の値で上に向かう）
+
+	// 各行の登場タイミングを決めるためのストップウォッチ
+	Stopwatch stopwatch{StartImmediately::Yes};
+
+	Stopwatch sw;
+	sw.start();
 
 	while (System::Update())
 	{
@@ -400,11 +425,14 @@ void Main()
 		font(s3dLeft).drawAt(dotPos, Palette::White);
 
 		// dotPos2で描画する文字
-		font(s3dLight).drawAt(dotPos2, Palette::White);
+		font(s3dRight).drawAt(dotPos2, Palette::White);
 		
-
 		// ブラックホールを描画する（カメラ座標を考慮せずスクリーン座標で描画）
 		Circle(dotPos, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
 		Circle(dotPos2, 10).draw(ColorF(0.0, 0.0, 0.0, 0.0));
+
+		while (sw.msF() < 1000.0 / FPS)
+                  ;
+		sw.restart();
 	}
 }
